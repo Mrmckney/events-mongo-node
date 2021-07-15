@@ -9,43 +9,32 @@ app.use(express.json()) // use express and parse everything into json
 // connect to mongoose 
 mongoose
     .connect(process.env.DB_CONNECTION , {useNewUrlParser: true, useUnifiedTopology: true })
-    .then( () => console.log('connected to mongo...'))
+    .then( () => {
+        app.listen(5000) 
+        console.log('App is listening on 5000, and connected to mongo')
+    })
     .catch(err => console.log(err))
 
+// import the router
+const eventsRoutes = require('./src/routes/eventsRoutes')
+app.use(eventsRoutes)
 
-// create schema = rules to control type of data
+// const newEvent = {
+//     title: 'Clean up Boca Beach',
+//     date: '2021-08-02',
+//     description: 'Cleaning up all trash from Boca Beach',
+//     cost: 'Free',
+//     attendees: ['Christan', 'Mia', 'Noah', 'Emily', 'Zach']
+// }
 
-const eventSchema = mongoose.Schema({
-    title: String,
-    date: Date,
-    description: String,
-    cost: String,
-    attendees: Array
-})
+// function createEvent(){
+//     new Event(newEvent)
+//     .save()
+//     .then( () => console.log('Event was saved'))
+//     .catch(err => console.log(err))
+// }
 
-const Event = mongoose.model('Event', eventSchema) // create model from Schema 
-
-const newEvent = {
-    title: 'Clean up Boca Beach',
-    date: '2021-08-02',
-    description: 'Cleaning up all trash from Boca Beach',
-    cost: 'Free',
-    attendees: ['Christan', 'Mia', 'Noah', 'Emily', 'Zach']
-}
-
-function createEvent(){
-    new Event(newEvent)
-    .save()
-    .then( () => console.log('Event was saved'))
-    .catch(err => console.log(err))
-}
-
-app.get('/', (req, res) => {
-    createEvent()
-    res.send('Event was created')
-})
-
-
-app.listen(5000, (req, res) => {
-    console.log('Listening on port 5000...')
-} )
+// app.get('/', (req, res) => {
+//     createEvent()
+//     res.send('Event was created')
+// })
