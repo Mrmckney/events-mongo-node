@@ -13,10 +13,36 @@ mongoose
     .catch(err => console.log(err))
 
 
-// first get route 
+// create schema = rules to control type of data
 
-app.get('/events', (req, res) => {
-    res.send('Hello World')
+const eventSchema = mongoose.Schema({
+    title: String,
+    date: Date,
+    description: String,
+    cost: String,
+    attendees: Array
+})
+
+const Event = mongoose.model('Event', eventSchema) // create model from Schema 
+
+const newEvent = {
+    title: 'Clean up Boca Beach',
+    date: '2021-08-02',
+    description: 'Cleaning up all trash from Boca Beach',
+    cost: 'Free',
+    attendees: ['Christan', 'Mia', 'Noah', 'Emily', 'Zach']
+}
+
+function createEvent(){
+    new Event(newEvent)
+    .save()
+    .then( () => console.log('Event was saved'))
+    .catch(err => console.log(err))
+}
+
+app.get('/', (req, res) => {
+    createEvent()
+    res.send('Event was created')
 })
 
 
